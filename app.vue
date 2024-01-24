@@ -1,7 +1,16 @@
 <template>
   <div>
     <v-app>
-      <v-btn> Button </v-btn>
+      <Main />
+      <NuxtPage />
     </v-app>
   </div>
 </template>
+
+<script>
+import Main from "@/assets/views/main.vue";
+export default {
+  name: "App",
+  components: { Main },
+};
+</script>

@@ -24,13 +24,6 @@ export default defineNuxtConfig({
   ],
   css: ["~/assets/css/main.css"],
   devtools: { enabled: true },
-  webpack: {
-    loaders: {
-      vue: {
-        hotReload: true,
-      },
-    },
-  },
   vue: {
     propsDestructure: true,
   },
