@@ -30,6 +30,7 @@ export default {
     top: 0;
     z-index: 99999;
     border-bottom: 1px solid rgb(255, 179, 0);
+    box-shadow: 4px 7px 10px white !important;
 }
 .router-link-active {
     background-color: #78909C;
