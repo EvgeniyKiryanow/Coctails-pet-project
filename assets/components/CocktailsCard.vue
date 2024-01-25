@@ -19,6 +19,7 @@
   
   <script>
   import { ref, defineProps } from 'vue';
+  import { useRouter } from 'vue-router';
   
   export default {
     name: "CocktailCard",
@@ -50,7 +51,7 @@
     },
     setup(props, context) {
       const cardColor = ref("amber-darken-1");
-  
+      const router = useRouter();
       const remove = () => {
         // Remove logic
         console.log("Remove button clicked");
@@ -65,6 +66,8 @@
       const showDetails = () => {
         // Show details logic
         console.log("More details button clicked");
+        // router.push({ path: `/fullDescription/${props.id}` });
+        router.push({ path: `/full_description/${props.id}` });
       };
   
       return {

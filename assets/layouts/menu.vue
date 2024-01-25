@@ -2,7 +2,7 @@
   <v-toolbar class="navbar" density="comfortable" :elevation="8" title="Cocktails">
     <v-toolbar-items>
       <NuxtLink to="/"><v-btn color="amber-darken-1">Home page</v-btn></NuxtLink>
-      <NuxtLink to="/createCocktail"><v-btn color="amber-darken-1">Create Coctail</v-btn></NuxtLink>
+      <NuxtLink to="/create_cocktail"><v-btn color="amber-darken-1">Create Coctail</v-btn></NuxtLink>
       <NuxtLink to="/favourites"><v-btn color="amber-darken-1">My favourites</v-btn></NuxtLink>
     </v-toolbar-items>
 
