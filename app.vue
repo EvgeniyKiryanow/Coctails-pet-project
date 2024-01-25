@@ -1,16 +1,16 @@
 <template>
   <div>
     <v-app>
-      <Main />
+      <MainMenu />
       <NuxtPage />
     </v-app>
   </div>
 </template>
 
 <script>
-import Main from "@/assets/views/main.vue";
+import MainMenu from "@/assets/layouts/menu.vue";
 export default {
   name: "App",
-  components: { Main },
+  components: { MainMenu },
 };
 </script>

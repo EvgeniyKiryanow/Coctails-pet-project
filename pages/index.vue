@@ -33,6 +33,12 @@
         { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 5 },
         { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 6 },
         { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 7 },
+        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 8 },
+        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 9 },
+        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 10 },
+        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 11 },
+        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 12 },
+        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 13 },
       ]);
   
       const handleRemove = (cocktailId) => {
