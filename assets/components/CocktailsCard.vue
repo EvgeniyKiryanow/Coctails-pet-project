@@ -1,6 +1,7 @@
 <template>
     <v-card variant="elevated" :color="cardColor" :title="title" :text="description">
       <h3>Steps to make a cocktail</h3>
+      {{ value }}
       <template v-if="type === 'description'">
         <!-- Content for description type -->
         <!-- ... -->
@@ -24,6 +25,9 @@
   export default {
     name: "CocktailCard",
     props: {
+        value: {
+            required: false
+        },
         id: {
             type: Number,
             required: true,
@@ -64,9 +68,6 @@
       };
   
       const showDetails = () => {
-        // Show details logic
-        console.log("More details button clicked");
-        // router.push({ path: `/fullDescription/${props.id}` });
         router.push({ path: `/full_description/${props.id}` });
       };
   
