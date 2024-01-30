@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submit">
+  <form>
     <v-text-field
       v-model="cocktailName.value.value"
       :counter="10"
@@ -28,9 +28,11 @@
           <v-btn @click="removeCocktailsStep(index)">Remove step</v-btn>
         </li>
       </ol>
+
+      <!-- <p v-if="todosValidation.errorMessage.value">{{ todosValidation.errorMessage.value }}</p> -->
     </v-col>
 
-    <v-btn class="me-4" type="submit"> create </v-btn>
+    <v-btn class="me-4" @click="submit" type="submit"> create </v-btn>
 
     <v-btn @click="handleReset"> clear </v-btn>
   </form>
@@ -42,14 +44,15 @@ import { useField, useForm } from "vee-validate";
 
 export default {
   setup() {
-    const { handleSubmit, resetForm } = useForm({
-      validationSchema: {
-        cocktailName(value) {
-          if (value?.length >= 3) return true;
-          return "Cocktail Name needs to be at least 3 characters.";
+    const { handleSubmit, resetForm, setValues, validate, values, refs } =
+      useForm({
+        validationSchema: {
+          cocktailName(value) {
+            if (value?.length >= 3) return true;
+            return "Cocktail Name needs to be at least 3 characters.";
+          },
         },
-      },
-    });
+      });
 
     const newCocktailsStep = ref("");
     const CocktailsStep = ref([]);
@@ -58,7 +61,7 @@ export default {
       if (newCocktailsStep.value.trim() !== "") {
         CocktailsStep.value = [
           ...CocktailsStep.value,
-          { text: newCocktailsStep.value, completed: false },
+          { text: newCocktailsStep.value },
         ];
         newCocktailsStep.value = "";
       }
@@ -67,10 +70,6 @@ export default {
     const removeCocktailsStep = (index) => {
       CocktailsStep.value.splice(index, 1);
     };
-
-    const submit = handleSubmit((values) => {
-      alert(JSON.stringify(values, null, 2));
-    });
 
     const cocktailName = useField("cocktailName");
     const cocktailsDescription = useField("cocktailsDescription");
@@ -82,6 +81,11 @@ export default {
       CocktailsStep.value = [];
     };
 
+    const submit = handleSubmit((values) => {
+      values.cocktailsStep = CocktailsStep.value;
+      alert(JSON.stringify(values, null, 1));
+    });
+
     return {
       newCocktailsStep,
       CocktailsStep,
@@ -92,6 +96,7 @@ export default {
       cocktailName,
       cocktailsDescription,
       cocktailsStep,
+      //   todosValidation,
     };
   },
 };
