@@ -7,13 +7,27 @@
     </v-toolbar-items>
 
     <v-divider vertical class="mx-0"></v-divider>
-    <NuxtLink class="log-in" to="/registration"><v-btn color="amber-darken-1" icon="mdi-account"></v-btn></NuxtLink>
+    <NuxtLink class="log-in" to="/authentication/registration"><v-btn color="amber-darken-1" icon="mdi-account"></v-btn></NuxtLink>
+   <v-btn v-if="!logOutIsVisible" color="amber-darken-1" @click="handleLogOut"> Log out</v-btn>
+   <div v-if="logOutIsVisible">
+    <v-btn color="amber-darken-1" @click="handleLogOut"> return</v-btn>
+</div>
   </v-toolbar>
 </template>
 
 <script>
 export default {
-    name: 'MenuBar'
+    name: 'MenuBar',
+    data(){
+        return {
+            logOutIsVisible: false
+        }
+    },
+    methods: {
+        handleLogOut() {
+            this.logOutIsVisible = !this.logOutIsVisible;
+        }
+    }
 };
 </script>
 

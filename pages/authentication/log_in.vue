@@ -1,21 +1,12 @@
 <template>
     <div>
+        <h1>Log in</h1>
       <v-card
         class="mx-auto pa-12 pb-8"
         elevation="8"
         max-width="448"
         rounded="lg"
       >
-        <div class="text-subtitle-1 text-medium-emphasis">Name</div>
-  
-        <v-text-field
-          v-model="registerData.name"
-          density="compact"
-          placeholder="Name"
-          prepend-inner-icon="mdi-star-outline"
-          variant="outlined"
-        ></v-text-field>
-  
         <div class="text-subtitle-1 text-medium-emphasis">Account</div>
   
         <v-text-field
@@ -56,12 +47,6 @@
         Reset <v-icon icon="mdi-alert-circle"></v-icon>
         </v-btn>
   
-        <v-card class="mb-12" color="surface-variant" variant="tonal">
-          <v-card-text class="text-medium-emphasis text-caption">
-            Warning: We don't have a feature to send you an email if you forget your password.
-          </v-card-text>
-        </v-card>
-  
         <v-btn
           block
           class="mb-8"
@@ -71,19 +56,8 @@
           :disabled="hasValidationErrors"
           @click="handleRegister"
         >
-          Sign up now
+            Log In
         </v-btn>
-  
-        <v-card-text class="text-center">
-          <a
-            class="text-blue text-decoration-none"
-            href="#"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <NuxtLink class="log-in" to="/authentication/log_in">Log In <v-icon icon="mdi-chevron-right"></v-icon></NuxtLink>
-          </a>
-        </v-card-text>
       </v-card>
     </div>
   </template>
@@ -98,11 +72,9 @@
       const registerData = ref({
         email: '',
         password: '',
-        name: '',
       });
   
       const handleRegister = () => {
-        alert(registerData.value.name);
         alert(registerData.value.email);
         alert(registerData.value.password);
         this.$emit('form-submit', registerData.value);
@@ -120,7 +92,6 @@
   
       const hasValidationErrors = computed(() => {
         return (
-          !registerData.value.name ||
           !registerData.value.email ||
           !registerData.value.password ||
           !emailRules.value.every(rule => rule(registerData.value.email)) ||
@@ -129,7 +100,6 @@
       });
 
       const handleReset = () => {
-        registerData.value.name = "";
         registerData.value.email = "";
         registerData.value.password = "";
     };
