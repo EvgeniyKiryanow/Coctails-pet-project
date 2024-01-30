@@ -1,78 +1,78 @@
 <template>
-    <div>
-      <h1 class="title-all-cocktails">All Cocktails</h1>
-      <div class="cocktails-list-wrapper">
-        <div class="cocktail-item" v-for="(cocktail, index) in cocktailsList" :key="index">
-          <CocktailsCard
-            :key="cocktail.id"
-            :id="cocktail.id"
-            :title="cocktail.title"
-            :description="cocktail.description"
-            :stepsList="cocktail.stepsList"
-            :type="'description'"
-            @remove-item="handleRemove"
-          />
-        </div>
+  <div>
+    <h1 class="title-all-cocktails">All Cocktails</h1>
+    <div v-if="loading">Loading...</div>
+    <div v-else class="cocktails-list-wrapper">
+      <div
+        class="cocktail-item"
+        v-for="(cocktail, index) in cocktailsList"
+        :key="index"
+      >
+        <CocktailsCard
+          :key="cocktail.id"
+          :id="cocktail.id"
+          :title="cocktail.title"
+          :description="cocktail.description"
+          :stepsList="cocktail.stepsList"
+          :type="'description'"
+          @remove-item="handleRemove"
+        />
       </div>
     </div>
-  </template>
-  
-  <script>
-  import CocktailsCard from "../assets/components/CocktailsCard.vue";
-  import { ref } from 'vue';
-  
-  export default {
-    name: "MainPage",
-    components: { CocktailsCard },
-    setup() {
-      const cocktailsList = ref([
-        { title: "First cocntails", description: "First description", stepsList: ["1", "2", "3", "4"], id: 1 },
-        { title: "Second cocntails", description: "Second description", stepsList: ["11", "22", "33", "44"], id: 2 },
-        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 3 },
-        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 4 },
-        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 5 },
-        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 6 },
-        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 7 },
-        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 8 },
-        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 9 },
-        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 10 },
-        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 11 },
-        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 12 },
-        { title: "3 cocntails", description: "3 description", stepsList: ["14", "32", "23", "14"], id: 13 },
-      ]);
-  
-      const handleRemove = (cocktailId) => {
-        const index = cocktailsList.value.findIndex((cocktail) => cocktail.id === cocktailId);
-        if (index !== -1) {
-          cocktailsList.value.splice(index, 1);
-        }
-      };
-  
-      return {
-        cocktailsList,
-        handleRemove,
-      };
-    },
-  };
-  </script>
-  
-  <style lang="scss" scoped>
-  .title-all-cocktails {
-    padding-top: 15px;
-  }
-  .cocktails-list-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 15px;
-  }
-  .cocktail-item {
-    width: 23%;
-    padding: 10px;
-    box-shadow: 6px 6px 8px black;
-    margin: 10px;
-    position: relative;
-    z-index: 1;
-    background: transparent;
-  }
-  </style>
-  
+  </div>
+</template>
+
+<script>
+import CocktailsCard from "../assets/components/CocktailsCard.vue";
+import { ref, onMounted } from "vue";
+import { useWebsiteStore } from "../stores/website";
+
+export default {
+  name: "MainPage",
+  components: { CocktailsCard },
+  setup() {
+    const website = useWebsiteStore();
+    const loading = ref(true);
+    website.fetch();
+
+    onMounted(() => {
+      loading.value = false;
+    });
+
+    const handleRemove = (cocktailId) => {
+      const index = website.cocktails.value.findIndex(
+        (cocktail) => cocktail.id === cocktailId
+      );
+      if (index !== -1) {
+        website.cocktails.value.splice(index, 1);
+      }
+    };
+
+    return {
+      cocktailsList: website.cocktails,
+      loading,
+      handleRemove,
+    };
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.title-all-cocktails {
+  padding-top: 15px;
+}
+.cocktails-list-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 15px;
+}
+.cocktail-item {
+  width: 23%;
+  padding: 10px;
+  box-shadow: 6px 6px 8px black;
+  margin: 10px;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+</style>

@@ -1,56 +1,46 @@
 <template>
   <div class="mains">
-    <h1>Cocktail Full Description</h1>
-    <p>Cocktail ID: {{ $route.params.id }}</p>
-    {{ cocktailDetails }}
-    <!-- You can add more content here as needed -->
+    <div v-if="loading">Loading...</div>
+    <div v-else>
+      <div v-for="(cocktail, index) in cocktailslist"
+        :key="index">
+        <div v-if="parseInt(cocktail.id) === parseInt(cocktailId)">
+          <h1>Cocktail Full Description</h1>
+          <p>{{ cocktail.title }}</p>
+          <p>{{ cocktail.description }}</p>
+          <p>{{ cocktail.stepsList }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { ref, onMounted, computed } from "vue";
+import { useWebsiteStore } from "../../stores/website";
+import { useRoute } from 'vue-router';
+
 export default {
-  async asyncData({ params }) {
-    console.log(params, 'params');
-    // You can fetch cocktail details based on the ID from your API or data source here if needed
-    // const cocktailDetails = await fetchCocktailDetails(params.id);
-    return { cocktailId: params.id };
-  },
-  props: {
-    // Define the props you expect to receive
-    id: {
-      type: Number,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: false,
-    },
-    stepsList: {
-      type: Array,
-      required: true,
-    },
-    type: {
-      type: String,
-      required: false,
-    },
-  },
-  computed: {
-    cocktailDetails() {
-      // Use the received props as needed
-      return {
-        id: this.id,
-        title: this.title,
-        description: this.description,
-        stepsList: this.stepsList,
-        type: this.type,
-      };
-    },
+  setup() {
+    const website = useWebsiteStore();
+    const loading = ref(true);
+    const route = useRoute();
+
+    const cocktailId = ref(route.params.id);
+
+    website.fetch();
+    onMounted(()=> {
+      loading.value = false;
+    })
+
+    return {
+      cocktailslist: website.cocktails,
+      cocktailId,
+      loading,
+    };
   },
 };
+
 </script>
 
 <style lang="scss" scoped>

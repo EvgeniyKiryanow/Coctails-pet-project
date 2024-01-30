@@ -31,8 +31,8 @@ export default {
   z-index: 0;
   width: 100vw;
   height: 100vh;
-  background-image: url('@/assets/img/background.webp');
-  background-size: cover;
-  background-position: center;
+  // background-image: url('@/assets/img/background.webp');
+  // background-size: cover;
+  // background-position: center;
 }
 </style>
