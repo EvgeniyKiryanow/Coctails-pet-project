@@ -8,16 +8,16 @@
 
     <v-divider vertical class="mx-0"></v-divider>
     <NuxtLink class="log-in" to="/authentication/registration"><v-btn color="amber-darken-1" icon="mdi-account"></v-btn></NuxtLink>
-   <v-btn v-if="!logOutIsVisible" color="amber-darken-1" @click="handleLogOut"> Log out</v-btn>
-   <div v-if="logOutIsVisible">
-    <v-btn color="amber-darken-1" @click="handleLogOut"> return</v-btn>
-</div>
+    <v-btn @click="handleLogOut" color="amber-darken-1">Log Out</v-btn>
+    <log-out-modal @accept="handleAccept" :is-opened="logOutIsVisible" />
   </v-toolbar>
 </template>
 
 <script>
+import LogOutModal from "@/assets/components/LogOutModal.vue"
 export default {
     name: 'MenuBar',
+    components: { LogOutModal },
     data(){
         return {
             logOutIsVisible: false
@@ -26,7 +26,11 @@ export default {
     methods: {
         handleLogOut() {
             this.logOutIsVisible = !this.logOutIsVisible;
-        }
+        },
+        handleAccept(bool) {
+            console.log(bool, 'bool')
+            this.logOutIsVisible = bool;
+        },
     }
 };
 </script>
@@ -42,7 +46,7 @@ export default {
 .navbar {
     position: sticky;
     top: 0;
-    z-index: 99999;
+    z-index: 999;
     border-bottom: 1px solid rgb(255, 179, 0);
     box-shadow: 4px 7px 10px white !important;
 }
