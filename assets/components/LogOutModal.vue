@@ -3,11 +3,10 @@
   <v-dialog v-model="isLogOutOpened" persistent width="auto">
     <v-card>
       <v-card-title class="text-h5">
-        Use Google's location service?
+        Do you wanna to Log Out?
       </v-card-title>
       <v-card-text
-        >Let Google help apps determine location. This means sending anonymous
-        location data to Google, even when no apps are running.</v-card-text
+        >If you log out you will no be able to have my favourites page</v-card-text
       >
       <v-card-actions>
         <v-spacer></v-spacer>

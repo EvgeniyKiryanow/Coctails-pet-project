@@ -8,6 +8,7 @@
 
     <v-divider vertical class="mx-0"></v-divider>
     <NuxtLink class="log-in" to="/authentication/registration"><v-btn color="amber-darken-1" icon="mdi-account"></v-btn></NuxtLink>
+    <v-divider vertical class="mx-0"></v-divider>
     <v-btn @click="handleLogOut" color="amber-darken-1">Log Out</v-btn>
     <log-out-modal @accept="handleAccept" :is-opened="logOutIsVisible" />
   </v-toolbar>
