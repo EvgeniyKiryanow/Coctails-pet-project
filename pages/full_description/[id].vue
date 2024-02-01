@@ -3,9 +3,13 @@
     <div v-if="loading">Loading...</div>
     <div v-else>
       <h1>Cocktail Full Description</h1>
-      <p>{{ cocktail.title }}</p>
-      <p>{{ cocktail.description }}</p>
-      <p>{{ cocktail.stepsList }}</p>
+      <v-card :title="cocktail.title" :text="cocktail.description">
+        <div>
+          <ol v-for="(stepList, index) in cocktail.stepsList" :key="index">
+            <li>{{ index + ' ' + stepList.step }}</li>
+          </ol>
+        </div>
+      </v-card>
     </div>
   </div>
 </template>

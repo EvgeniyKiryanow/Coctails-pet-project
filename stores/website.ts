@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 interface Cocktail {
   title: string;
   description: string;
-  stepsList: string[];
+  stepsList: object[];
   id: number;
 }
 
@@ -25,79 +25,79 @@ export const useWebsiteStore = defineStore("websiteStore", {
         {
           title: "First cocntails",
           description: "First description",
-          stepsList: ["1", "2", "3", "4"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 1,
         },
         {
           title: "Second cocntails",
           description: "Second description",
-          stepsList: ["11", "22", "33", "44"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 2,
         },
         {
           title: "3 cocntails",
           description: "3 description",
-          stepsList: ["14", "32", "23", "14"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 3,
         },
         {
           title: "3 cocntails",
           description: "3 description",
-          stepsList: ["14", "32", "23", "14"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 4,
         },
         {
           title: "3 cocntails",
           description: "3 description",
-          stepsList: ["14", "32", "23", "14"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 5,
         },
         {
           title: "3 cocntails",
           description: "3 description",
-          stepsList: ["14", "32", "23", "14"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 6,
         },
         {
           title: "3 cocntails",
           description: "3 description",
-          stepsList: ["14", "32", "23", "14"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 7,
         },
         {
           title: "3 cocntails",
           description: "3 description",
-          stepsList: ["14", "32", "23", "14"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 8,
         },
         {
           title: "3 cocntails",
           description: "3 description",
-          stepsList: ["14", "32", "23", "14"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 9,
         },
         {
           title: "3 cocntails",
           description: "3 description",
-          stepsList: ["14", "32", "23", "14"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 10,
         },
         {
           title: "3 cocntails",
           description: "3 description",
-          stepsList: ["14", "32", "23", "14"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 11,
         },
         {
           title: "3 cocntails",
           description: "3 description",
-          stepsList: ["14", "32", "23", "14"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 12,
         },
         {
           title: "3 cocntails",
           description: "3 description",
-          stepsList: ["14", "32", "23", "14"],
+          stepsList: [{'step': '1'},{'step': '1'},{'step': '1'},{'step': '1'}],
           id: 13,
         },
       ];
