@@ -1,5 +1,5 @@
 <template>
-    <v-card variant="elevated" :color="cardColor" :title="title" :text="description">
+    <v-card variant="elevated" :title="title" :text="description">
       <h3>Steps to make a cocktail</h3>
       {{ value }}
       <template v-if="type === 'description'">
