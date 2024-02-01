@@ -2,21 +2,16 @@
   <div class="mains">
     <div v-if="loading">Loading...</div>
     <div v-else>
-      <div v-for="(cocktail, index) in cocktailslist"
-        :key="index">
-        <div v-if="parseInt(cocktail.id) === parseInt(cocktailId)">
-          <h1>Cocktail Full Description</h1>
-          <p>{{ cocktail.title }}</p>
-          <p>{{ cocktail.description }}</p>
-          <p>{{ cocktail.stepsList }}</p>
-        </div>
-      </div>
+      <h1>Cocktail Full Description</h1>
+      <p>{{ cocktail.title }}</p>
+      <p>{{ cocktail.description }}</p>
+      <p>{{ cocktail.stepsList }}</p>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted} from "vue";
 import { useWebsiteStore } from "../../stores/website";
 import { useRoute } from 'vue-router';
 
@@ -33,9 +28,11 @@ export default {
       loading.value = false;
     })
 
+    const getCocktailById = website.getCocktailById(parseInt(cocktailId.value));
+
     return {
       cocktailslist: website.cocktails,
-      cocktailId,
+      cocktail: getCocktailById,
       loading,
     };
   },

@@ -111,4 +111,8 @@ export const useWebsiteStore = defineStore("websiteStore", {
       this.$state.cocktails = cocktails;
     },
   },
+  getters: {
+    getAllCocktails: ({cocktails}) => cocktails,
+    getCocktailById: (state) => (id: number) => state.cocktails.find((cocktail) => cocktail.id === id),
+  },
 });
