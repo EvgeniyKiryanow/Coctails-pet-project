@@ -17,34 +17,38 @@ export const useUserAuthDataStore = defineStore({
     user: null,
   }),
   getters: {
-    getUserData: ({ user }) => user,
-    getUserToken: ({ user }) => user?.accessToken,
+    getUserData: ($state) => $state.user, // Используем $state вместо state
+    getUserToken: ($state) => $state.user?.accessToken, // Используем $state вместо state
   },
   actions: {
     setUser(user: User | null) {
-      this.user = user;
+      this.$state.user = user; // Используем $state вместо state
       if (user) {
-        // Save accessToken to localStorage when user is set
+        // Сохраняем accessToken в localStorage при установке пользователя
         localStorage.setItem('accessToken', user.accessToken);
         console.log('here')
       } else {
-        // Clear accessToken from localStorage when user is null
+        // Удаляем accessToken из localStorage при установке пользователя в null
         localStorage.removeItem('accessToken');
       }
     },
     loadUserFromLocalStorage() {
-      // Load user data from localStorage when app starts
+      // Загружаем данные пользователя из localStorage при запуске приложения
       const accessToken = localStorage.getItem('accessToken');
       if (accessToken) {
-        // If accessToken is found, create a mock user object with it
+        // Если accessToken найден, создаем фиктивный объект пользователя с его помощью
         const mockUser: User = {
-          name: 'User Name', // You might want to retrieve this from localStorage as well
+          name: 'User Name', // Вы можете также получить это из localStorage
           accessToken,
-          uid: 'mock-uid', // You might want to retrieve this from localStorage as well
-          email: 'user@example.com' // You might want to retrieve this from localStorage as well
+          uid: 'mock-uid', // Вы можете также получить это из localStorage
+          email: 'user@example.com' // Вы можете также получить это из localStorage
         };
         this.setUser(mockUser);
       }
     },
+    logOut() {
+      // Очищаем данные пользователя при выходе
+      this.setUser(null);
+    }
   },
 });

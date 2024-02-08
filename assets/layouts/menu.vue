@@ -35,6 +35,7 @@
   import LogOutModal from "@/assets/components/LogOutModal.vue";
   import { useUserAuthDataStore } from '@/stores/auth'; // Import your Pinia store
   import { useRouter } from 'vue-router';
+  import { computed } from 'vue';
   
   export default {
     name: "MenuBar",
@@ -44,15 +45,7 @@
       const router = useRouter();
   
       // Define computed property for hasAccessToken
-      const hasAccessToken = userAuthStore;
-        console.log(hasAccessToken, 'hasAccessToken')
-      watch(
-      () => userAuthStore.hasAccessToken,
-      (newVal) => {
-        console.log('Access Token changed:', newVal);
-        // Perform any additional actions as needed
-      }
-    );
+      const hasAccessToken = computed(() => !!userAuthStore.user);
   
       // Define methods
       const handleLogOut = () => {

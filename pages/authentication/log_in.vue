@@ -89,23 +89,43 @@
 
 <script>
 import { ref, computed, defineComponent } from "vue";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { useRouter } from "vue-router";
+import { useUserAuthDataStore } from '@/stores/auth';
 
 export default defineComponent({
   setup() {
+    const userAuthStore = useUserAuthDataStore(); // Access the Pinia store instance
     const visible = ref(false);
     const auth = getAuth();
-
+    const router = useRouter();
     const registerData = ref({
       email: "",
       password: "",
     });
 
-    const handleRegister = () => {
-      alert(registerData.value.email);
-      alert(registerData.value.password);
-      // Instead of emitting, you can call the method to sign in with email/password
-      signInWithEmailPassword(registerData.value.email, registerData.value.password);
+    const handleRegister = async () => {
+      try {
+        const { email, password } = registerData.value;
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        localStorage.setItem('accessToken', userCredential.accessToken);
+        
+        // Set user in Pinia store
+        userAuthStore.setUser({
+          name: user.displayName, // Adjust according to your user data
+          accessToken: userCredential.accessToken,
+          uid: user.uid,
+          email: user.email,
+        });
+
+        router.push("/favourites");
+        // Handle signed-in user (you may want to redirect or show a welcome message)
+        console.log(user);
+      } catch (error) {
+        console.error(error);
+        // Handle errors
+      }
     };
 
     const signInWithGoogle = async () => {
@@ -159,4 +179,5 @@ export default defineComponent({
     };
   },
 });
+
 </script>
