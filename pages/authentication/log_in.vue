@@ -59,6 +59,18 @@
         Log In
       </v-btn>
 
+      <!-- Google Sign-In button -->
+      <v-btn
+        block
+        class="mb-8"
+        color="blue"
+        size="large"
+        variant="outlined"
+        @click="signInWithGoogle"
+      >
+        Sign in with Google
+      </v-btn>
+
       <v-card-text class="text-center">
         <a
           class="text-blue text-decoration-none"
@@ -77,10 +89,12 @@
 
 <script>
 import { ref, computed, defineComponent } from "vue";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 export default defineComponent({
   setup() {
     const visible = ref(false);
+    const auth = getAuth();
 
     const registerData = ref({
       email: "",
@@ -90,7 +104,21 @@ export default defineComponent({
     const handleRegister = () => {
       alert(registerData.value.email);
       alert(registerData.value.password);
-      this.$emit("form-submit", registerData.value);
+      // Instead of emitting, you can call the method to sign in with email/password
+      signInWithEmailPassword(registerData.value.email, registerData.value.password);
+    };
+
+    const signInWithGoogle = async () => {
+      try {
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        // Handle signed-in user (you may want to redirect or show a welcome message)
+        console.log(user);
+      } catch (error) {
+        console.error(error);
+        // Handle errors
+      }
     };
 
     const emailRules = computed(() => [
@@ -127,6 +155,7 @@ export default defineComponent({
       emailRules,
       passwordRules,
       hasValidationErrors,
+      signInWithGoogle,
     };
   },
 });

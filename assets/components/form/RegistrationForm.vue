@@ -58,7 +58,8 @@
 
       <v-card class="mb-12" color="surface-variant" variant="tonal">
         <v-card-text class="text-medium-emphasis text-caption">
-          Warning: We don't have a feature to send you an email if you forget your password.
+          Warning: We don't have a feature to send you an email if you forget
+          your password.
         </v-card-text>
       </v-card>
 
@@ -71,7 +72,7 @@
         :disabled="hasValidationErrors || isRegistering"
         @click="handleRegister"
       >
-        {{ isRegistering ? 'Signing up...' : 'Sign up now' }}
+        {{ isRegistering ? "Signing up..." : "Sign up now" }}
       </v-btn>
 
       <v-card-text class="text-center">
@@ -81,7 +82,9 @@
           rel="noopener noreferrer"
           target="_blank"
         >
-          <NuxtLink class="log-in" to="/authentication/log_in">Log In <v-icon icon="mdi-chevron-right"></v-icon></NuxtLink>
+          <NuxtLink class="log-in" to="/authentication/log_in"
+            >Log In <v-icon icon="mdi-chevron-right"></v-icon
+          ></NuxtLink>
         </a>
       </v-card-text>
     </v-card>
@@ -89,27 +92,31 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { useFirebaseAuth } from '../../../composables/useFirebaseAuth';
+import { ref, computed } from "vue";
+import { useFirebaseAuth } from "../../../composables/useFirebaseAuth";
+import { useUserAuthDataStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
 
 const { registerUser } = useFirebaseAuth();
-
+const userAuthStore = useUserAuthDataStore();
+const router = useRouter();
 const visible = ref(false);
 
 const registerData = ref({
-  email: '',
-  password: '',
-  name: '',
+  email: "",
+  password: "",
+  name: "",
 });
 
 const emailRules = computed(() => [
-  (v) => !!v || 'Email is required',
-  (v) => /^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(v) || 'Must be a valid email address',
+  (v) => !!v || "Email is required",
+  (v) =>
+    /^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(v) || "Must be a valid email address",
 ]);
 
 const passwordRules = computed(() => [
-  (v) => !!v || 'Password is required',
-  (v) => v && v.length >= 6 || 'Password must be at least 6 characters',
+  (v) => !!v || "Password is required",
+  (v) => (v && v.length >= 6) || "Password must be at least 6 characters",
 ]);
 
 const hasValidationErrors = computed(() => {
@@ -117,8 +124,8 @@ const hasValidationErrors = computed(() => {
     !registerData.value.name ||
     !registerData.value.email ||
     !registerData.value.password ||
-    !emailRules.value.every(rule => rule(registerData.value.email)) ||
-    !passwordRules.value.every(rule => rule(registerData.value.password))
+    !emailRules.value.every((rule) => rule(registerData.value.email)) ||
+    !passwordRules.value.every((rule) => rule(registerData.value.password))
   );
 });
 
@@ -129,7 +136,6 @@ const handleReset = () => {
   registerData.value.email = "";
   registerData.value.password = "";
 };
-
 const handleRegister = async () => {
   if (isRegistering.value) {
     return;
@@ -137,13 +143,22 @@ const handleRegister = async () => {
 
   try {
     isRegistering.value = true;
-    const success = await registerUser(registerData.value.email, registerData.value.password);
+    const response = await registerUser(
+      registerData.value.email,
+      registerData.value.password
+    );
 
-    if (success) {
-      // Handle successful registration, e.g., redirect to a new page
+    if (response) {
+      userAuthStore.setUser(response.user);
+      router.push("/favourites");
     } else {
-      // Handle registration failure
+      // Handle registration failure more effectively
+      throw new Error("Registration failed");
     }
+  } catch (error) {
+    // Handle errors properly
+    console.error("Error during registration:", error);
+    alert("Registration failed. Please try again.");
   } finally {
     isRegistering.value = false;
   }
