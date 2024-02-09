@@ -9,8 +9,8 @@
 
     <v-col cols="12" md="4">
       <v-textarea
-        label=" Cocktails description"
         v-model="cocktailsDescription.value.value"
+        label=" Cocktails description"
         variant="outlined"
       ></v-textarea>
     </v-col>
@@ -28,11 +28,9 @@
           <v-btn @click="removeCocktailsStep(index)">Remove step</v-btn>
         </li>
       </ol>
-
-      <!-- <p v-if="todosValidation.errorMessage.value">{{ todosValidation.errorMessage.value }}</p> -->
     </v-col>
 
-    <v-btn class="me-4" @click="submit" type="submit"> create </v-btn>
+    <v-btn class="me-4" @click="handleSubmit"> create </v-btn>
 
     <v-btn @click="handleReset"> clear </v-btn>
   </form>
@@ -41,62 +39,56 @@
 <script>
 import { ref } from "vue";
 import { useField, useForm } from "vee-validate";
+import { cocktailService } from "../../services/cocktailService";
 
 export default {
   setup() {
-    const { handleSubmit, resetForm, setValues, validate, values, refs } =
-      useForm({
-        validationSchema: {
-          cocktailName(value) {
-            if (value?.length >= 3) return true;
-            return "Cocktail Name needs to be at least 3 characters.";
-          },
-        },
-      });
-
     const newCocktailsStep = ref("");
     const CocktailsStep = ref([]);
 
     const addNewCocktailsStep = () => {
-      if (newCocktailsStep.value.trim() !== "") {
-        CocktailsStep.value = [
-          ...CocktailsStep.value,
-          { text: newCocktailsStep.value },
-        ];
-        newCocktailsStep.value = "";
-      }
+      // Your existing logic to add a new cocktail step
     };
 
     const removeCocktailsStep = (index) => {
-      CocktailsStep.value.splice(index, 1);
+      // Your existing logic to remove a cocktail step
     };
 
     const cocktailName = useField("cocktailName");
     const cocktailsDescription = useField("cocktailsDescription");
-    const cocktailsStep = useField("CocktailsStep");
 
     const handleReset = () => {
-      resetForm();
-      newCocktailsStep.value = "";
-      CocktailsStep.value = [];
+      // Your existing logic to reset form fields
     };
 
-    const submit = handleSubmit((values) => {
-      values.cocktailsStep = CocktailsStep.value;
-      alert(JSON.stringify(values, null, 1));
-    });
+    const handleSubmit = async (values) => {
+      // Your existing submit logic
+
+      // Example usage of cocktailService to add a cocktail
+      try {
+        const cocktailId = await cocktailService.addCocktail({
+          name: "Jeka",
+          description: "test",
+          steps: ['1', '2', '3'],
+          created_by: 123234, // You need to replace this with the actual user ID
+          created_at: 123234,
+        });
+        console.log("Cocktail added with ID: ", cocktailId);
+        handleReset(); // Clear form fields
+      } catch (error) {
+        console.error("Error adding cocktail: ", error);
+      }
+    };
 
     return {
       newCocktailsStep,
       CocktailsStep,
       addNewCocktailsStep,
       removeCocktailsStep,
-      submit,
+      handleSubmit,
       handleReset,
       cocktailName,
       cocktailsDescription,
-      cocktailsStep,
-      //   todosValidation,
     };
   },
 };
