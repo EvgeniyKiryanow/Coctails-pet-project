@@ -89,9 +89,14 @@
 
 <script>
 import { ref, computed, defineComponent } from "vue";
-import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import { useRouter } from "vue-router";
-import { useUserAuthDataStore } from '@/stores/auth';
+import { useUserAuthDataStore } from "@/stores/auth";
 
 export default defineComponent({
   setup() {
@@ -107,10 +112,14 @@ export default defineComponent({
     const handleRegister = async () => {
       try {
         const { email, password } = registerData.value;
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password,
+        );
         const user = userCredential.user;
-        localStorage.setItem('accessToken', userCredential.accessToken);
-        
+        localStorage.setItem("accessToken", userCredential.accessToken);
+
         // Set user in Pinia store
         userAuthStore.setUser({
           name: user.displayName, // Adjust according to your user data
@@ -179,5 +188,4 @@ export default defineComponent({
     };
   },
 });
-
 </script>

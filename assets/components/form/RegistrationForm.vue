@@ -93,9 +93,9 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import { useFirebaseAuth } from "../../../composables/useFirebaseAuth";
 import { useUserAuthDataStore } from "@/stores/auth";
-import { useRouter } from "vue-router";
 
 const { registerUser } = useFirebaseAuth();
 const userAuthStore = useUserAuthDataStore();
@@ -145,7 +145,7 @@ const handleRegister = async () => {
     isRegistering.value = true;
     const response = await registerUser(
       registerData.value.email,
-      registerData.value.password
+      registerData.value.password,
     );
 
     if (response) {

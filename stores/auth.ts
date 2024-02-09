@@ -17,38 +17,33 @@ export const useUserAuthDataStore = defineStore({
     user: null,
   }),
   getters: {
-    getUserData: ($state) => $state.user, // Используем $state вместо state
-    getUserToken: ($state) => $state.user?.accessToken, // Используем $state вместо state
+    getUserData: ($state) => $state.user,
+    getUserToken: ($state) => $state.user?.accessToken,
   },
   actions: {
     setUser(user: User | null) {
-      this.$state.user = user; // Используем $state вместо state
+      this.$state.user = user;
       if (user) {
-        // Сохраняем accessToken в localStorage при установке пользователя
-        localStorage.setItem('accessToken', user.accessToken);
-        console.log('here')
+        localStorage.setItem("accessToken", user.accessToken);
+        console.log("here");
       } else {
-        // Удаляем accessToken из localStorage при установке пользователя в null
-        localStorage.removeItem('accessToken');
+        localStorage.removeItem("accessToken");
       }
     },
     loadUserFromLocalStorage() {
-      // Загружаем данные пользователя из localStorage при запуске приложения
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem("accessToken");
       if (accessToken) {
-        // Если accessToken найден, создаем фиктивный объект пользователя с его помощью
         const mockUser: User = {
-          name: 'User Name', // Вы можете также получить это из localStorage
+          name: "User Name",
           accessToken,
-          uid: 'mock-uid', // Вы можете также получить это из localStorage
-          email: 'user@example.com' // Вы можете также получить это из localStorage
+          uid: "mock-uid",
+          email: "user@example.com",
         };
         this.setUser(mockUser);
       }
     },
     logOut() {
-      // Очищаем данные пользователя при выходе
       this.setUser(null);
-    }
+    },
   },
 });
