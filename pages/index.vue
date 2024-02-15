@@ -25,7 +25,6 @@
 <script>
 import { ref, onMounted } from "vue";
 import CocktailsCard from "../assets/components/CocktailsCard.vue";
-import { useWebsiteStore } from "../stores/website";
 import { cocktailService } from "../services/cocktailService";
 
 export default {
@@ -33,9 +32,7 @@ export default {
   components: { CocktailsCard },
   setup() {
     const cocktails = ref([]);
-    const website = useWebsiteStore();
     const loading = ref(true);
-    website.fetch();
 
     onMounted(async () => {
       loading.value = false;
@@ -46,13 +43,8 @@ export default {
       }
     });
 
-    const handleRemove = (cocktailId) => {
-      const index = website.cocktails.value.findIndex(
-        (cocktail) => cocktail.id === cocktailId,
-      );
-      if (index !== -1) {
-        website.cocktails.value.splice(index, 1);
-      }
+    const handleRemove = () => {
+      // TODO
     };
 
     return {

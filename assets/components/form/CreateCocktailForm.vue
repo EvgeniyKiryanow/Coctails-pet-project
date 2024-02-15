@@ -39,9 +39,9 @@
 <script>
 import { ref } from "vue";
 import { useField } from "vee-validate";
+import { useRouter } from "vue-router";
 import { cocktailService } from "../../services/cocktailService";
 import { useUserAuthDataStore } from "@/stores/auth";
-import { useRouter } from "vue-router";
 
 export default {
   setup() {
@@ -54,7 +54,7 @@ export default {
       // Your existing logic to add a new cocktail step
     };
 
-    const removeCocktailsStep = (index) => {
+    const removeCocktailsStep = () => {
       // Your existing logic to remove a cocktail step
     };
 
@@ -66,7 +66,7 @@ export default {
       router.push("/favourites");
     };
 
-    const handleSubmit = async (values) => {
+    const handleSubmit = async () => {
       try {
         console.log(userAuthStore.user.uid, "userData.value.uiduserData.value");
         if (userAuthStore.user.uid) {

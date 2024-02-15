@@ -150,7 +150,6 @@ const handleRegister = async () => {
 
     if (response) {
       userAuthStore.setUser(response.user);
-      console.log(userData.value, 'userData.value')
       router.push("/favourites");
     } else {
       // Handle registration failure more effectively
