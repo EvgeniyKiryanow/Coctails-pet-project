@@ -72,6 +72,7 @@ export default {
         if (userAuthStore.user.uid) {
           await cocktailService.addCocktail({
             name: "Jeka",
+            title: "title",
             description: "test",
             steps: ["1", "2", "3"],
             created_by: userAuthStore.user.uid, // You need to replace this with the actual user ID

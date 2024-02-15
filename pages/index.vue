@@ -4,16 +4,16 @@
     <div v-if="loading">Loading...</div>
     <div v-else class="cocktails-list-wrapper">
       <div
-        class="cocktail-item"
         v-for="(cocktail, index) in cocktailsList"
         :key="index"
+        class="cocktail-item"
       >
         <CocktailsCard
-          :key="cocktail.id"
           :id="cocktail.id"
+          :key="cocktail.id"
           :title="cocktail.title"
           :description="cocktail.description"
-          :stepsList="cocktail.stepsList"
+          :steps-list="cocktail.stepsList"
           :type="'description'"
           @remove-item="handleRemove"
         />
@@ -23,25 +23,32 @@
 </template>
 
 <script>
-import CocktailsCard from "../assets/components/CocktailsCard.vue";
 import { ref, onMounted } from "vue";
+import CocktailsCard from "../assets/components/CocktailsCard.vue";
 import { useWebsiteStore } from "../stores/website";
+import { cocktailService } from "../services/cocktailService";
 
 export default {
   name: "MainPage",
   components: { CocktailsCard },
   setup() {
+    const cocktails = ref([]);
     const website = useWebsiteStore();
     const loading = ref(true);
     website.fetch();
 
-    onMounted(() => {
+    onMounted(async () => {
       loading.value = false;
+      try {
+        cocktails.value = await cocktailService.getAllCocktails();
+      } catch (error) {
+        console.error("Error fetching cocktails:", error);
+      }
     });
 
     const handleRemove = (cocktailId) => {
       const index = website.cocktails.value.findIndex(
-        (cocktail) => cocktail.id === cocktailId
+        (cocktail) => cocktail.id === cocktailId,
       );
       if (index !== -1) {
         website.cocktails.value.splice(index, 1);
@@ -49,7 +56,7 @@ export default {
     };
 
     return {
-      cocktailsList: website.cocktails,
+      cocktailsList: cocktails,
       loading,
       handleRemove,
     };
