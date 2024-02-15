@@ -65,4 +65,18 @@ export const cocktailService = {
       throw new Error("Failed to fetch cocktails");
     }
   },
+
+  async getAllCocktails() {
+    try {
+      const querySnapshot = await getDocs(collection(db, "cocktails"));
+      const cocktails = [];
+      querySnapshot.forEach((doc) => {
+        cocktails.push({ id: doc.id, ...doc.data() });
+      });
+      return cocktails;
+    } catch (error) {
+      console.error("Error getting all cocktails: ", error);
+      throw new Error("Failed to fetch all cocktails");
+    }
+  },
 };

@@ -38,14 +38,18 @@
 
 <script>
 import { ref } from "vue";
-import { useField, useForm } from "vee-validate";
+import { useField } from "vee-validate";
 import { cocktailService } from "../../services/cocktailService";
+import { useUserAuthDataStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
+    const router = useRouter();
+    const userAuthStore = useUserAuthDataStore();
+    const userData = ref(null);
     const newCocktailsStep = ref("");
     const CocktailsStep = ref([]);
-
     const addNewCocktailsStep = () => {
       // Your existing logic to add a new cocktail step
     };
@@ -59,21 +63,22 @@ export default {
 
     const handleReset = () => {
       // Your existing logic to reset form fields
+      router.push("/favourites");
     };
 
     const handleSubmit = async (values) => {
-      // Your existing submit logic
-
-      // Example usage of cocktailService to add a cocktail
       try {
-        const cocktailId = await cocktailService.addCocktail({
-          name: "Jeka",
-          description: "test",
-          steps: ['1', '2', '3'],
-          created_by: 123234, // You need to replace this with the actual user ID
-          created_at: 123234,
-        });
-        console.log("Cocktail added with ID: ", cocktailId);
+        console.log(userAuthStore.user.uid, "userData.value.uiduserData.value");
+        if (userAuthStore.user.uid) {
+          await cocktailService.addCocktail({
+            name: "Jeka",
+            description: "test",
+            steps: ["1", "2", "3"],
+            created_by: userAuthStore.user.uid, // You need to replace this with the actual user ID
+            created_at: Date.now(),
+          });
+        }
+        console.log("Cocktail added with ID: ");
         handleReset(); // Clear form fields
       } catch (error) {
         console.error("Error adding cocktail: ", error);
@@ -89,6 +94,7 @@ export default {
       handleReset,
       cocktailName,
       cocktailsDescription,
+      userData,
     };
   },
 };
