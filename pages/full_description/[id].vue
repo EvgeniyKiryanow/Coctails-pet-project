@@ -1,20 +1,32 @@
 <template>
-  <div class="mains">
+  <div class="cocktails-full">
+    <h1 class="title">Cocktail Full Description</h1>
     <LoaderUi v-if="loading" />
     <div v-else>
-      <h1 class="title">Cocktail Full Description</h1>
-      <v-card
-        v-if="cocktail.length > 0"
-        :title="cocktail[0].title || cocktail[0].name"
-        :text="cocktail[0].description"
-      >
-        <div>
-          <ol v-for="(stepList, index) in cocktail[0].steps" :key="index">
-            <li>{{ index + 1 }} {{ stepList.step }}</li>
-          </ol>
-        </div>
-      </v-card>
-      <div v-else>No cocktail found</div>
+      <div>
+        <v-card
+          v-if="cocktail.length > 0"
+          :title="cocktail[0].title || cocktail[0].name"
+          :text="cocktail[0].description"
+        >
+          <v-card-text class="title-steps">Steps :</v-card-text>
+          <div class="steps-wrapper">
+            <ol>
+              <li v-for="(stepList, index) in cocktail[0].steps" :key="index">
+                <span>{{ index + 1 }}</span> {{ stepList.step }}
+              </li>
+            </ol>
+          </div>
+        </v-card>
+      </div>
+      <div class="button-wrapper">
+        <NuxtLink to="/"
+          ><v-btn color="amber-darken-1">Back to home Page</v-btn></NuxtLink
+        >
+        <v-btn color="amber-darken-1">Edit</v-btn>
+        <v-btn color="amber-darken-1">Add</v-btn>
+        <v-btn color="amber-darken-1">Delete</v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -35,21 +47,16 @@ export default {
 
     const cocktailId = ref(route.params.id);
     onMounted(async () => {
-      loading.value = false;
       try {
         cocktails.value = await cocktailService.getAllCocktails();
         filterCocktailsById();
+        loading.value = false;
       } catch (error) {
         console.error("Error fetching cocktails:", error);
+        loading.value = false;
       }
     });
     const filterCocktailsById = () => {
-      console.log(
-        cocktails.value,
-        "cocktails.value",
-        cocktailId.value,
-        "cocktailId.value",
-      );
       filteredCocktail.value = cocktails.value.filter(
         (cocktail) => cocktail.id === cocktailId.value,
       );
@@ -63,9 +70,38 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.mains {
+<style lang="scss">
+.cocktails-full {
   position: relative;
   z-index: 32;
+  .v-card {
+    margin-top: 15px;
+    box-shadow: 2px 3px 8px orange;
+  }
+  .v-card-item {
+    border-bottom: 1px solid lightgrey;
+  }
+  .v-card-text {
+    text-align: center;
+    padding-top: 10px;
+  }
+  .title-steps {
+    font-weight: 800;
+  }
+  .steps-wrapper {
+    padding: 35px;
+    ol {
+      li {
+        span {
+          color: orange;
+        }
+      }
+    }
+  }
+  .button-wrapper {
+    button {
+      margin-left: 15px;
+    }
+  }
 }
 </style>
