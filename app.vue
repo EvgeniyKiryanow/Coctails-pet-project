@@ -1,13 +1,12 @@
 <template>
-<div>
-  <v-app>
-    <MainMenu />
-    <v-container fluid>
-      <div class="background-container"></div>
-      <NuxtPage class="test" />
-    </v-container>
-  </v-app>
-</div>
+  <div>
+    <v-app>
+      <MainMenu />
+      <v-container fluid>
+        <NuxtPage class="test" />
+      </v-container>
+    </v-app>
+  </div>
 </template>
 
 <script>

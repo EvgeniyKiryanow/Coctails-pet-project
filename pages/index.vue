@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h1 class="title-all-cocktails">All Cocktails</h1>
-    <div v-if="loading">Loading...</div>
+    <h1 class="title">All Cocktails</h1>
+    <LoaderUi v-if="loading" />
+    <!-- <div class="loading" v-if="loading">Loading...</div> -->
     <div v-else class="cocktails-list-wrapper">
       <div
         v-for="(cocktail, index) in cocktailsList"
@@ -25,11 +26,12 @@
 <script>
 import { ref, onMounted } from "vue";
 import CocktailsCard from "../assets/components/CocktailsCard.vue";
+import LoaderUi from "../assets/components/LoaderUi.vue";
 import { cocktailService } from "../services/cocktailService";
 
 export default {
   name: "MainPage",
-  components: { CocktailsCard },
+  components: { CocktailsCard, LoaderUi },
   setup() {
     const cocktails = ref([]);
     const loading = ref(true);
@@ -66,9 +68,9 @@ export default {
   padding: 15px;
 }
 .cocktail-item {
-  width: 23%;
+  width: 31%;
   padding: 10px;
-  box-shadow: 6px 6px 8px black;
+  box-shadow: 2px 3px 8px orange;
   margin: 10px;
   position: relative;
   z-index: 1;

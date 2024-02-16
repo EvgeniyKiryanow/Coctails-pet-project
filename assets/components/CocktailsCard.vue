@@ -1,11 +1,9 @@
 <template>
   <v-card variant="elevated" :title="title || name" :text="description">
-    <h3>Steps to make a cocktail</h3>
+    <v-card-text class="title-steps">Steps to make a cocktail :</v-card-text>
     {{ value }}
     <template v-if="type === 'description'">
       <!-- Content for description type -->
-      <!-- ... -->
-      ...
     </template>
     <v-list v-else lines="one">
       <v-list-item
@@ -35,11 +33,11 @@ export default {
       required: false,
     },
     id: {
-      type: Number,
+      type: String,
       required: true,
     },
     title: {
-      required: true,
+      required: false,
       default: "Cocktails title",
       type: String,
     },
@@ -86,3 +84,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+</style>

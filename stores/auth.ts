@@ -5,6 +5,7 @@ interface User {
   accessToken: string;
   uid: string;
   email: string;
+  id: string;
 }
 
 interface Auth {
@@ -38,6 +39,7 @@ export const useUserAuthDataStore = defineStore({
           accessToken,
           uid: "mock-uid",
           email: "user@example.com",
+          id: "Udmsdf2kcms",
         };
         this.setUser(mockUser);
       }

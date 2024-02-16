@@ -27,4 +27,5 @@ export default defineNuxtConfig({
   vue: {
     propsDestructure: true,
   },
+  css: ["@/assets/style/main.scss"],
 });

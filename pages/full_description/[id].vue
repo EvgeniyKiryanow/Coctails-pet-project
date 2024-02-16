@@ -1,8 +1,8 @@
 <template>
   <div class="mains">
-    <div v-if="loading">Loading...</div>
+    <LoaderUi v-if="loading" />
     <div v-else>
-      <h1>Cocktail Full Description</h1>
+      <h1 class="title">Cocktail Full Description</h1>
       <v-card
         v-if="cocktail.length > 0"
         :title="cocktail[0].title || cocktail[0].name"
@@ -23,8 +23,10 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { cocktailService } from "../services/cocktailService";
+import LoaderUi from "../assets/components/LoaderUi.vue";
 
 export default {
+  components: { LoaderUi },
   setup() {
     const loading = ref(true);
     const route = useRoute();

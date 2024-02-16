@@ -26,7 +26,7 @@
       ></NuxtLink>
     </template>
     <v-divider vertical class="mx-0"></v-divider>
-    <v-btn color="amber-darken-1" @click="handleLogOut">Log Out</v-btn>
+    <v-btn v-if="hasAccessToken" color="amber-darken-1" @click="handleLogOut">Log Out</v-btn>
     <log-out-modal :is-opened="logOutIsVisible" @accept="handleAccept" />
   </v-toolbar>
 </template>
@@ -46,7 +46,7 @@ export default {
 
     // Define computed property for hasAccessToken
     const hasAccessToken = computed(() => !!userAuthStore.user);
-
+    console.log(hasAccessToken, 'hasAccessToken')
     // Define methods
     const handleLogOut = () => {
       userAuthStore.logOut(); // Call the logout action from your store
@@ -80,7 +80,7 @@ export default {
   top: 0;
   z-index: 999;
   border-bottom: 1px solid rgb(255, 179, 0);
-  box-shadow: 4px 7px 10px white !important;
+  box-shadow: 4px 7px 10px grey !important;
 }
 .router-link-active {
   background-color: #78909c;
