@@ -59,18 +59,6 @@
         Log In
       </v-btn>
 
-      <!-- Google Sign-In button -->
-      <v-btn
-        block
-        class="mb-8"
-        color="blue"
-        size="large"
-        variant="outlined"
-        @click="signInWithGoogle"
-      >
-        Sign in with Google
-      </v-btn>
-
       <v-card-text class="text-center">
         <a
           class="text-blue text-decoration-none"
@@ -89,12 +77,7 @@
 
 <script>
 import { ref, computed, defineComponent } from "vue";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "vue-router";
 import { useUserAuthDataStore } from "@/stores/auth";
 
@@ -122,26 +105,12 @@ export default defineComponent({
 
         // Set user in Pinia store
         userAuthStore.setUser({
-          name: user.displayName, // Adjust according to your user data
-          accessToken: userCredential.accessToken,
+          accessToken: user.accessToken,
           uid: user.uid,
           email: user.email,
         });
 
         router.push("/favourites");
-        // Handle signed-in user (you may want to redirect or show a welcome message)
-        console.log(user);
-      } catch (error) {
-        console.error(error);
-        // Handle errors
-      }
-    };
-
-    const signInWithGoogle = async () => {
-      try {
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
         // Handle signed-in user (you may want to redirect or show a welcome message)
         console.log(user);
       } catch (error) {
@@ -184,7 +153,6 @@ export default defineComponent({
       emailRules,
       passwordRules,
       hasValidationErrors,
-      signInWithGoogle,
     };
   },
 });

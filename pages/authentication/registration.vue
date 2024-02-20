@@ -1,14 +1,12 @@
 <template>
-    <div>
-        <h1>Registration</h1>
-        <hr />
-        <RegistrationForm />
-    </div>
+  <div>
+    <h1 class="title">Registration</h1>
+    <RegistrationForm />
+  </div>
 </template>
 <script>
-import RegistrationForm from '../../assets/components/form/RegistrationForm.vue'
+import RegistrationForm from "../../assets/components/form/RegistrationForm.vue";
 export default {
-    components: { RegistrationForm },
-
-}
+  components: { RegistrationForm },
+};
 </script>

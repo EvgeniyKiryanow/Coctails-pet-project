@@ -2,7 +2,6 @@
   <div>
     <h1 class="title">All Cocktails</h1>
     <LoaderUi v-if="loading" />
-    <!-- <div class="loading" v-if="loading">Loading...</div> -->
     <div v-else class="cocktails-list-wrapper">
       <div
         v-for="(cocktail, index) in cocktailsList"

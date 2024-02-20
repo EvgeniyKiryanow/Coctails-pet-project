@@ -1,21 +1,11 @@
 <template>
-  <div>
+  <div class="registration">
     <v-card
       class="mx-auto pa-12 pb-8"
       elevation="8"
       max-width="448"
       rounded="lg"
     >
-      <div class="text-subtitle-1 text-medium-emphasis">Name</div>
-
-      <v-text-field
-        v-model="registerData.name"
-        density="compact"
-        placeholder="Name"
-        prepend-inner-icon="mdi-star-outline"
-        variant="outlined"
-      ></v-text-field>
-
       <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
       <v-text-field
@@ -105,7 +95,6 @@ const visible = ref(false);
 const registerData = ref({
   email: "",
   password: "",
-  name: "",
 });
 
 const emailRules = computed(() => [
@@ -121,7 +110,6 @@ const passwordRules = computed(() => [
 
 const hasValidationErrors = computed(() => {
   return (
-    !registerData.value.name ||
     !registerData.value.email ||
     !registerData.value.password ||
     !emailRules.value.every((rule) => rule(registerData.value.email)) ||
@@ -150,13 +138,12 @@ const handleRegister = async () => {
 
     if (response) {
       userAuthStore.setUser(response.user);
+      console.log(response.user, 'response.user');
       router.push("/favourites");
     } else {
-      // Handle registration failure more effectively
       throw new Error("Registration failed");
     }
   } catch (error) {
-    // Handle errors properly
     console.error("Error during registration:", error);
     alert("Registration failed. Please try again.");
   } finally {
@@ -164,3 +151,9 @@ const handleRegister = async () => {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.registration {
+  padding-top: 25px;
+}
+</style>
