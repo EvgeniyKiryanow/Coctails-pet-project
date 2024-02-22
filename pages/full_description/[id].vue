@@ -4,8 +4,6 @@
     <LoaderUi v-if="loading" />
     <div v-else>
       <div v-if="cocktail.length > 0">
-        {{ cocktail[0].created_by }}
-        {{ canDelete }}
         <v-card
           :title="cocktail[0].title || cocktail[0].name"
           :text="cocktail[0].description"
@@ -14,7 +12,18 @@
           <div class="steps-wrapper">
             <ol>
               <li v-for="(stepList, index) in cocktail[0].steps" :key="index">
-                <span>{{ index + 1 }}</span> {{ stepList.step }}
+                <span>{{ stepList }}</span>
+              </li>
+            </ol>
+          </div>
+          <v-card-text class="title-steps">Ingredients :</v-card-text>
+          <div class="ingredients-wrapper">
+            <ol>
+              <li
+                v-for="(ingredient, index) in cocktail[0].ingredients"
+                :key="index"
+              >
+                <span>{{ ingredient }}</span>
               </li>
             </ol>
           </div>
@@ -23,6 +32,7 @@
           <NuxtLink to="/"
             ><v-btn color="amber-darken-1">Back to home Page</v-btn></NuxtLink
           >
+          {{ checkFavourites }}
           <v-btn
             v-if="canDelete !== cocktail[0].created_by"
             color="amber-darken-1"
@@ -123,7 +133,7 @@ export default {
   .title-steps {
     font-weight: 800;
   }
-  .steps-wrapper {
+  .steps-wrapper, .ingredients-wrapper {
     padding: 35px;
     ol {
       li {

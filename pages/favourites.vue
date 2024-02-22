@@ -1,8 +1,6 @@
 <template>
   <div>
     <h1>Favourites</h1>
-    {{ filteredCocktails }}
-    {{ uid }}
     <div v-for="cocktail in filteredCocktails" :key="cocktail.id">
       <ul>
         <li>
@@ -15,8 +13,14 @@
       <v-btn
         v-if="cocktail.created_by !== uid"
         color="amber-darken-1"
-        @click="handleDelete(cocktail.id)"
+        @click="handleDeleteFromFavourites(cocktail.id)"
         >Delete from favourites</v-btn
+      >
+      <v-btn
+        v-if="cocktail.created_by === uid"
+        color="amber-darken-1"
+        @click="handleDelete(cocktail.id)"
+        >Delete</v-btn
       >
     </div>
   </div>
@@ -60,7 +64,7 @@ export default defineComponent({
       }
     };
 
-    const handleDelete = async (cocktailId) => {
+    const handleDeleteFromFavourites = async (cocktailId) => {
       const foundedCocktail = cocktails.value.filter(
         (cocktail) => cocktail.id === cocktailId,
       );
@@ -80,9 +84,18 @@ export default defineComponent({
         return favourites;
       }
     };
+    const handleDelete = async (cocktailId) => {
+      try {
+        await cocktailService.deleteCocktail(cocktailId);
+        router.push("/");
+      } catch (error) {
+        console.error("Error deleting cocktail:", error);
+      }
+    };
 
     return {
       filteredCocktails,
+      handleDeleteFromFavourites,
       handleDelete,
       uid,
     };
