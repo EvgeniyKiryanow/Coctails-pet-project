@@ -3,9 +3,10 @@
     <h1 class="title">Cocktail Full Description</h1>
     <LoaderUi v-if="loading" />
     <div v-else>
-      <div>
+      <div v-if="cocktail.length > 0">
+        {{ cocktail[0].created_by }}
+        {{ canDelete }}
         <v-card
-          v-if="cocktail.length > 0"
           :title="cocktail[0].title || cocktail[0].name"
           :text="cocktail[0].description"
         >
@@ -18,22 +19,32 @@
             </ol>
           </div>
         </v-card>
+        <div class="button-wrapper">
+          <NuxtLink to="/"
+            ><v-btn color="amber-darken-1">Back to home Page</v-btn></NuxtLink
+          >
+          <v-btn
+            v-if="canDelete !== cocktail[0].created_by"
+            color="amber-darken-1"
+            @click="handleAddToFavourites"
+            >Add to favourites</v-btn
+          >
+          <v-btn
+            v-if="canDelete === cocktail[0].created_by"
+            color="amber-darken-1"
+            @click="handleDelete"
+            >Delete</v-btn
+          >
+        </div>
       </div>
-      <div class="button-wrapper">
-        <NuxtLink to="/"
-          ><v-btn color="amber-darken-1">Back to home Page</v-btn></NuxtLink
-        >
-        <v-btn color="amber-darken-1">Edit</v-btn>
-        <v-btn color="amber-darken-1">Add</v-btn>
-        <v-btn color="amber-darken-1">Delete</v-btn>
-      </div>
+      <div v-else>No cocktail found.</div>
     </div>
   </div>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { cocktailService } from "../services/cocktailService";
 import LoaderUi from "../assets/components/LoaderUi.vue";
 
@@ -42,10 +53,11 @@ export default {
   setup() {
     const loading = ref(true);
     const route = useRoute();
+    const router = useRouter();
     const cocktails = ref([]);
     const filteredCocktail = ref([]);
-
     const cocktailId = ref(route.params.id);
+
     onMounted(async () => {
       try {
         cocktails.value = await cocktailService.getAllCocktails();
@@ -56,15 +68,38 @@ export default {
         loading.value = false;
       }
     });
+
     const filterCocktailsById = () => {
       filteredCocktail.value = cocktails.value.filter(
         (cocktail) => cocktail.id === cocktailId.value,
       );
     };
+    const canDelete = localStorage.getItem("uid") || false;
+    const handleDelete = async () => {
+      try {
+        const cocktailToDelete = filteredCocktail.value[0];
+        await cocktailService.deleteCocktail(cocktailToDelete.id);
+        router.push("/");
+      } catch (error) {
+        console.error("Error deleting cocktail:", error);
+      }
+    };
+    const handleAddToFavourites = async () => {
+      const cocktailId = filteredCocktail.value[0].id;
+      filteredCocktail.value[0].favourites.push(localStorage.getItem("uid"));
+      const updatedData = {
+        ...filteredCocktail.value[0],
+      };
+      await cocktailService.updateCocktail(cocktailId, updatedData);
+      router.push("/favourites");
+    };
 
     return {
       cocktail: filteredCocktail,
       loading,
+      canDelete,
+      handleDelete,
+      handleAddToFavourites,
     };
   },
 };

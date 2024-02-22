@@ -84,11 +84,10 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import { useFirebaseAuth } from "../../../composables/useFirebaseAuth";
-import { useUserAuthDataStore } from "@/stores/auth";
-
-const { registerUser } = useFirebaseAuth();
-const userAuthStore = useUserAuthDataStore();
+import { storeToRefs } from "pinia";
+import { useUserAuthDataStore } from "~/stores/auth";
+const { registrateUser } = useUserAuthDataStore();
+const { authenticated } = storeToRefs(useUserAuthDataStore());
 const router = useRouter();
 const visible = ref(false);
 
@@ -128,26 +127,19 @@ const handleRegister = async () => {
   if (isRegistering.value) {
     return;
   }
-
   try {
-    isRegistering.value = true;
-    const response = await registerUser(
-      registerData.value.email,
-      registerData.value.password,
-    );
-
-    if (response) {
-      userAuthStore.setUser(response.user);
-      console.log(response.user, 'response.user');
-      router.push("/favourites");
-    } else {
-      throw new Error("Registration failed");
-    }
+    await registrateUser({
+      email: registerData.value.email,
+      password: registerData.value.password,
+    });
   } catch (error) {
     console.error("Error during registration:", error);
     alert("Registration failed. Please try again.");
   } finally {
     isRegistering.value = false;
+  }
+  if (authenticated) {
+    router.push("/");
   }
 };
 </script>

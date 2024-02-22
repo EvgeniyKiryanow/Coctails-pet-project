@@ -14,25 +14,33 @@
         variant="outlined"
       ></v-textarea>
     </v-col>
-    <!-- <v-col cols="12" md="4">
-      <v-file-input label="File input"></v-file-input>
-    </v-col> -->
 
     <v-col cols="12" md="4">
-      <h3>Coctails step to creating</h3>
+      <h3>Cocktails steps to create</h3>
       <v-text-field v-model="newCocktailsStep" label="Add a new step" />
       <v-btn @click="addNewCocktailsStep">+</v-btn>
       <ol>
-        <li v-for="(todo, index) in CocktailsStep" :key="index">
-          {{ todo.text }}
+        <li v-for="(step, index) in cocktailsSteps" :key="index">
+          {{ step.text }}
           <v-btn @click="removeCocktailsStep(index)">Remove step</v-btn>
         </li>
       </ol>
     </v-col>
 
-    <v-btn class="me-4" @click="handleSubmit"> create </v-btn>
+    <v-col cols="12" md="4">
+      <h3>Ingredients list</h3>
+      <v-text-field v-model="newIngredient" label="Add a new ingredient" />
+      <v-btn @click="addNewIngredient">+</v-btn>
+      <ol>
+        <li v-for="(ingredient, index) in cocktailIngredients" :key="index">
+          {{ ingredient.text }}
+          <v-btn @click="removeIngredient(index)">Remove ingredient</v-btn>
+        </li>
+      </ol>
+    </v-col>
 
-    <v-btn @click="handleReset"> clear </v-btn>
+    <v-btn class="me-4" @click="handleSubmit"> Create </v-btn>
+    <v-btn @click="handleReset"> Clear </v-btn>
   </form>
 </template>
 
@@ -41,45 +49,60 @@ import { ref } from "vue";
 import { useField } from "vee-validate";
 import { useRouter } from "vue-router";
 import { cocktailService } from "../../services/cocktailService";
-import { useUserAuthDataStore } from "@/stores/auth";
+import { useUserAuthDataStore } from "~/stores/auth";
 
 export default {
   setup() {
     const router = useRouter();
     const userAuthStore = useUserAuthDataStore();
-    const userData = ref(null);
-    const newCocktailsStep = ref("");
-    const CocktailsStep = ref([]);
-    const addNewCocktailsStep = () => {
-      // Your existing logic to add a new cocktail step
-    };
-
-    const removeCocktailsStep = () => {
-      // Your existing logic to remove a cocktail step
-    };
-
     const cocktailName = useField("cocktailName");
     const cocktailsDescription = useField("cocktailsDescription");
+    const cocktailsSteps = ref([]);
+    const newCocktailsStep = ref("");
+    const cocktailIngredients = ref([]);
+    const newIngredient = ref("");
+
+    const addNewCocktailsStep = () => {
+      cocktailsSteps.value.push({ text: newCocktailsStep.value });
+      newCocktailsStep.value = "";
+    };
+
+    const removeCocktailsStep = (index) => {
+      cocktailsSteps.value.splice(index, 1);
+    };
+
+    const addNewIngredient = () => {
+      cocktailIngredients.value.push({ text: newIngredient.value });
+      newIngredient.value = "";
+    };
+
+    const removeIngredient = (index) => {
+      cocktailIngredients.value.splice(index, 1);
+    };
 
     const handleReset = () => {
-      // Your existing logic to reset form fields
+      cocktailName.value.value = "";
+      cocktailsDescription.value.value = "";
+      cocktailsSteps.value = [];
+      cocktailIngredients.value = [];
       router.push("/favourites");
     };
 
     const handleSubmit = async () => {
       try {
-        console.log(userAuthStore.user.uid, "userData.value.uiduserData.value");
         if (userAuthStore.user.uid) {
           await cocktailService.addCocktail({
-            name: "Jeka",
-            title: "title",
-            description: "test",
-            steps: ["1", "2", "3"],
-            created_by: userAuthStore.user.uid, // You need to replace this with the actual user ID
+            name: cocktailName.value.value,
+            description: cocktailsDescription.value.value,
+            steps: cocktailsSteps.value.map((step) => step.text),
+            ingredients: cocktailIngredients.value.map(
+              (ingredient) => ingredient.text,
+            ),
+            created_by: userAuthStore.user.uid,
             created_at: Date.now(),
+            favourites: [userAuthStore.user.uid],
           });
         }
-        console.log("Cocktail added with ID: ");
         handleReset(); // Clear form fields
       } catch (error) {
         console.error("Error adding cocktail: ", error);
@@ -88,14 +111,17 @@ export default {
 
     return {
       newCocktailsStep,
-      CocktailsStep,
+      cocktailsSteps,
+      newIngredient,
+      cocktailIngredients,
       addNewCocktailsStep,
       removeCocktailsStep,
+      addNewIngredient,
+      removeIngredient,
       handleSubmit,
       handleReset,
       cocktailName,
       cocktailsDescription,
-      userData,
     };
   },
 };

@@ -77,45 +77,32 @@
 
 <script>
 import { ref, computed, defineComponent } from "vue";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "vue-router";
-import { useUserAuthDataStore } from "@/stores/auth";
+import { useUserAuthDataStore } from "~/stores/auth";
 
 export default defineComponent({
   setup() {
-    const userAuthStore = useUserAuthDataStore(); // Access the Pinia store instance
+    const { authenticateUser } = useUserAuthDataStore();
+    const { authenticated } = storeToRefs(useUserAuthDataStore());
     const visible = ref(false);
-    const auth = getAuth();
     const router = useRouter();
     const registerData = ref({
-      email: "",
-      password: "",
+      email: "test@gmail.com",
+      password: "12345678",
     });
 
     const handleRegister = async () => {
       try {
-        const { email, password } = registerData.value;
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password,
-        );
-        const user = userCredential.user;
-        localStorage.setItem("accessToken", userCredential.accessToken);
-
-        // Set user in Pinia store
-        userAuthStore.setUser({
-          accessToken: user.accessToken,
-          uid: user.uid,
-          email: user.email,
+        await authenticateUser({
+          email: registerData.value.email,
+          password: registerData.value.password,
         });
-
-        router.push("/favourites");
-        // Handle signed-in user (you may want to redirect or show a welcome message)
-        console.log(user);
       } catch (error) {
-        console.error(error);
-        // Handle errors
+        console.error("Error during registration:", error);
+        alert("Registration failed. Please try again.");
+      }
+      if (authenticated) {
+        router.push("/");
       }
     };
 

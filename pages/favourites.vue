@@ -1,49 +1,90 @@
 <template>
   <div>
     <h1>Favourites</h1>
-    <ul>
-      <li v-for="cocktail in filteredCocktails" :key="cocktail.id">
-        {{ cocktail.name }}
-        {{ cocktail.description }}
-        {{ cocktail.steps }}
-      </li>
-    </ul>
+    {{ filteredCocktails }}
+    {{ uid }}
+    <div v-for="cocktail in filteredCocktails" :key="cocktail.id">
+      <ul>
+        <li>
+          {{ cocktail.ingredients_list }}
+          {{ cocktail.name }}
+          {{ cocktail.description }}
+          {{ cocktail.steps }}
+        </li>
+      </ul>
+      <v-btn
+        v-if="cocktail.created_by !== uid"
+        color="amber-darken-1"
+        @click="handleDelete(cocktail.id)"
+        >Delete from favourites</v-btn
+      >
+    </div>
   </div>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { cocktailService } from "../services/cocktailService";
-import { useUserAuthDataStore } from "@/stores/auth";
 
 export default defineComponent({
   setup() {
     const cocktails = ref([]);
-    const userAuthStore = useUserAuthDataStore();
-    const userUid = userAuthStore.user.uid || null;
     const filteredCocktails = ref([]);
-
-    // Load cocktails when the component is mounted
+    const uid = ref("");
+    const router = useRouter();
     onMounted(async () => {
       try {
         cocktails.value = await cocktailService.getAllCocktails();
-        filterCocktailsByUserUid();
+        uid.value = localStorage.getItem("uid");
+        if (uid.value) {
+          await filterCocktailsByUser(uid.value);
+        } else {
+          console.error("User UID not available in localStorage.");
+        }
       } catch (error) {
         console.error("Error fetching cocktails:", error);
       }
     });
-    const filterCocktailsByUserUid = () => {
-      if (userUid) {
-        filteredCocktails.value = cocktails.value.filter(
-          (cocktail) => cocktail.created_by === userUid,
-        );
-      } else {
-        filteredCocktails.value = [];
+    const filterCocktailsByUser = (uid) => {
+      try {
+        filteredCocktails.value = cocktails.value.filter((cocktail) => {
+          // Check if the cocktail was created by the user or is in the user's favorites
+          return (
+            cocktail.created_by === uid ||
+            (cocktail.favourites && cocktail.favourites.includes(uid))
+          );
+        });
+      } catch (error) {
+        console.error("Error filtering cocktails:", error);
+      }
+    };
+
+    const handleDelete = async (cocktailId) => {
+      const foundedCocktail = cocktails.value.filter(
+        (cocktail) => cocktail.id === cocktailId,
+      );
+      const updatedFavourites = removeUidFromFavourites(
+        foundedCocktail[0].favourites,
+        uid.value,
+      );
+      foundedCocktail[0].favourites = [...updatedFavourites];
+      await cocktailService.updateCocktail(cocktailId, foundedCocktail[0]);
+      router.push("/");
+    };
+    const removeUidFromFavourites = (favourites, uidToRemove) => {
+      try {
+        return favourites.filter((uid) => uid !== uidToRemove);
+      } catch (error) {
+        console.error("Error removing uid from favourites:", error);
+        return favourites;
       }
     };
 
     return {
       filteredCocktails,
+      handleDelete,
+      uid,
     };
   },
 });

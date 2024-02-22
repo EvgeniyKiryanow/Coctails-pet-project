@@ -26,30 +26,29 @@
       ></NuxtLink>
     </template>
     <v-divider vertical class="mx-0"></v-divider>
-    <v-btn v-if="hasAccessToken" color="amber-darken-1" @click="handleLogOut">Log Out</v-btn>
-    <log-out-modal :is-opened="logOutIsVisible" @accept="handleAccept" />
+    <v-btn v-if="hasAccessToken" color="amber-darken-1" @click="handleLogOut"
+      >Log Out</v-btn
+    >
+    <!-- <log-out-modal :is-opened="logOutIsVisible" @accept="handleAccept" /> -->
   </v-toolbar>
 </template>
 
 <script>
 import { useRouter } from "vue-router";
-import { computed } from "vue";
-import LogOutModal from "@/assets/components/LogOutModal.vue";
-import { useUserAuthDataStore } from "@/stores/auth"; // Import your Pinia store
+import { storeToRefs } from "pinia"; // import storeToRefs helper hook from pinia
+import { useUserAuthDataStore } from "~/stores/auth";
+// import LogOutModal from "@/assets/components/LogOutModal.vue";
 
 export default {
   name: "MenuBar",
-  components: { LogOutModal },
+  // components: { LogOutModal },
   setup() {
-    const userAuthStore = useUserAuthDataStore(); // Access the Pinia store instance
     const router = useRouter();
-
-    // Define computed property for hasAccessToken
-    const hasAccessToken = computed(() => !!userAuthStore.user);
-    console.log(hasAccessToken, 'hasAccessToken')
+    const { logOut } = useUserAuthDataStore(); // use registrateUser action from  auth store
+    const { authenticated } = storeToRefs(useUserAuthDataStore());
     // Define methods
     const handleLogOut = () => {
-      userAuthStore.logOut(); // Call the logout action from your store
+      logOut();
       router.push("/");
     };
 
@@ -59,7 +58,7 @@ export default {
     };
 
     return {
-      hasAccessToken,
+      hasAccessToken: authenticated,
       handleLogOut,
       handleAccept,
     };
