@@ -133,7 +133,8 @@ export default {
   .title-steps {
     font-weight: 800;
   }
-  .steps-wrapper, .ingredients-wrapper {
+  .steps-wrapper,
+  .ingredients-wrapper {
     padding: 35px;
     ol {
       li {
