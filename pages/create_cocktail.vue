@@ -37,9 +37,20 @@
             >
           </div>
           <ol>
-            <li v-for="(step, index) in cocktailsSteps" :key="index">
-              {{ step.text }}
-              <v-btn @click="removeCocktailsStep(index)">Remove step</v-btn>
+            <li
+              v-for="(step, index) in cocktailsSteps"
+              :key="index"
+              class="list-wrapper"
+            >
+              <span class="orange"
+                >{{ index + 1 + "." }}
+                <span class="list-item">{{ step.text }}</span>
+              </span>
+              <v-btn
+                density="compact"
+                icon="mdi-minus"
+                @click="removeCocktailsStep(index)"
+              />
             </li>
           </ol>
         </v-col>
@@ -61,9 +72,20 @@
             >
           </div>
           <ol>
-            <li v-for="(ingredient, index) in cocktailIngredients" :key="index">
-              {{ ingredient.text }}
-              <v-btn @click="removeIngredient(index)">Remove ingredient</v-btn>
+            <li
+              v-for="(ingredient, index) in cocktailIngredients"
+              :key="index"
+              class="list-wrapper"
+            >
+              <span class="orange"
+                >{{ index + 1 + "." }}
+                <span class="list-item">{{ ingredient.text }}</span>
+              </span>
+              <v-btn
+                density="compact"
+                icon="mdi-minus"
+                @click="removeIngredient(index)"
+              />
             </li>
           </ol>
         </v-col>
@@ -173,6 +195,12 @@ export default {
     font-size: 18px;
     padding: 10px;
   }
+  .list-item {
+    color: black;
+    font-family: fantasy;
+    text-align: center;
+    font-size: 16px;
+  }
   .button-wrapper {
     padding-top: 10px;
     display: flex;
@@ -186,5 +214,16 @@ export default {
       margin-right: 25px;
     }
   }
+  .list-wrapper {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid orange;
+  }
+}
+.orange {
+  color: orange;
 }
 </style>
