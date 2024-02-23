@@ -1,27 +1,40 @@
 <template>
   <div>
-    <h1>Favourites</h1>
+    <h1 class="title">Favourites</h1>
     <div v-for="cocktail in filteredCocktails" :key="cocktail.id">
-      <ul>
-        <li>
-          {{ cocktail.ingredients_list }}
-          {{ cocktail.name }}
-          {{ cocktail.description }}
-          {{ cocktail.steps }}
-        </li>
-      </ul>
-      <v-btn
-        v-if="cocktail.created_by !== uid"
-        color="amber-darken-1"
-        @click="handleDeleteFromFavourites(cocktail.id)"
-        >Delete from favourites</v-btn
+      <v-card
+        class="favourites-cocktail-card"
+        :title="cocktail.name"
+        :subtitle="cocktail.description"
+        text="Ingredients"
       >
-      <v-btn
-        v-if="cocktail.created_by === uid"
-        color="amber-darken-1"
-        @click="handleDelete(cocktail.id)"
-        >Delete</v-btn
-      >
+        <ul v-for="(ingredient, index) in cocktail.ingredients" :key="index">
+          <li>
+            {{ ingredient }}
+          </li>
+        </ul>
+        <hr />
+        <span>Steps</span>
+        <ul v-for="(step, index) in cocktail.steps" :key="index">
+          <li>
+            {{ step }}
+          </li>
+        </ul>
+        <v-card-actions>
+          <v-btn
+            v-if="cocktail.created_by !== uid"
+            color="amber-darken-1"
+            @click="handleDeleteFromFavourites(cocktail.id)"
+            >Delete from favourites</v-btn
+          >
+          <v-btn
+            v-if="cocktail.created_by === uid"
+            color="amber-darken-1"
+            @click="handleDelete(cocktail.id)"
+            >Delete</v-btn
+          >
+        </v-card-actions>
+      </v-card>
     </div>
   </div>
 </template>
@@ -102,3 +115,10 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.favourites-cocktail-card {
+  padding: 20px;
+  margin: 20px;
+}
+</style>

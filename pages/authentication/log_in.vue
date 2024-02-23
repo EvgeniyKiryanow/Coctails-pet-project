@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Log in</h1>
+    <h1 class="title">Log in</h1>
     <v-card
       class="mx-auto pa-12 pb-8"
       elevation="8"
