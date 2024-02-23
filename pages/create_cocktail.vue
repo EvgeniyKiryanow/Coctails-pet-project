@@ -130,7 +130,7 @@ export default {
     };
 
     const addNewIngredient = () => {
-      if (!cocktailIngredients.value) {
+      if (!newIngredient.value) {
         return false;
       }
       cocktailIngredients.value.push({ text: newIngredient.value });
@@ -146,7 +146,6 @@ export default {
       cocktailsDescription.value.value = "";
       cocktailsSteps.value = [];
       cocktailIngredients.value = [];
-      router.push("/favourites");
     };
 
     const handleSubmit = async () => {
