@@ -33,8 +33,7 @@
               density="default"
               icon="mdi-plus"
               @click="addNewCocktailsStep"
-              >+</v-btn
-            >
+            ></v-btn>
           </div>
           <ol>
             <li
@@ -68,8 +67,7 @@
               density="default"
               icon="mdi-plus"
               @click="addNewIngredient"
-              >+</v-btn
-            >
+            ></v-btn>
           </div>
           <ol>
             <li
@@ -120,6 +118,9 @@ export default {
     const newIngredient = ref("");
 
     const addNewCocktailsStep = () => {
+      if (!newCocktailsStep.value) {
+        return false;
+      }
       cocktailsSteps.value.push({ text: newCocktailsStep.value });
       newCocktailsStep.value = "";
     };
@@ -129,6 +130,9 @@ export default {
     };
 
     const addNewIngredient = () => {
+      if (!cocktailIngredients.value) {
+        return false;
+      }
       cocktailIngredients.value.push({ text: newIngredient.value });
       newIngredient.value = "";
     };
