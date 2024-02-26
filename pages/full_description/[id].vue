@@ -34,7 +34,7 @@
           >
           {{ checkFavourites }}
           <v-btn
-            v-if="canDelete !== cocktail[0].created_by"
+            v-if="canDelete && canDelete !== cocktail[0].created_by"
             color="amber-darken-1"
             @click="handleAddToFavourites"
             >Add to favourites</v-btn

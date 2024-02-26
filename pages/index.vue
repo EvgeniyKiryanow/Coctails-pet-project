@@ -2,21 +2,48 @@
   <div>
     <h1 class="title">All Cocktails</h1>
     <LoaderUi v-if="loading" />
-    <div v-else class="cocktails-list-wrapper">
-      <div
-        v-for="(cocktail, index) in cocktailsList"
-        :key="index"
-        class="cocktail-item"
-      >
-        <CocktailsCard
-          :id="cocktail.id"
-          :key="cocktail.id"
-          :title="cocktail.title"
-          :description="cocktail.description"
-          :steps-list="cocktail.stepsList"
-          :type="'description'"
-          @remove-item="handleRemove"
-        />
+    <div v-else>
+      <v-row class="filter-wrapper">
+        <div class="filter-by-name">
+          <v-text-field
+            v-model="searchInput"
+            label="Cocktail name"
+            variant="outlined"
+            hide-details
+          ></v-text-field>
+          <v-btn @click="handleSearchByName">Search</v-btn>
+        </div>
+        <div class="filter-by-select">
+          <v-select
+            label="Filtered by"
+            :items="[
+              'California',
+              'Colorado',
+              'Florida',
+              'Georgia',
+              'Texas',
+              'Wyoming',
+            ]"
+            variant="outlined"
+          ></v-select>
+        </div>
+      </v-row>
+      <div class="cocktails-list-wrapper">
+        <div
+          v-for="(cocktail, index) in cocktailsList"
+          :key="index"
+          class="cocktail-item"
+        >
+          <CocktailsCard
+            :id="cocktail.id"
+            :key="cocktail.id"
+            :title="cocktail.title"
+            :description="cocktail.description"
+            :steps-list="cocktail.stepsList"
+            :type="'description'"
+            @remove-item="handleRemove"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -34,6 +61,7 @@ export default {
   setup() {
     const cocktails = ref([]);
     const loading = ref(true);
+    const searchInput = ref("");
 
     onMounted(async () => {
       loading.value = false;
@@ -48,10 +76,30 @@ export default {
       // TODO
     };
 
+    const handleSearchByName = async () => {
+      loading.value = true; // Show loader while searching
+      try {
+        if (searchInput.value.trim() === "") {
+          cocktails.value = await cocktailService.getAllCocktails();
+        } else {
+          cocktails.value = await cocktailService.searchCocktailsByName(
+            searchInput.value.trim(),
+            cocktails.value,
+          );
+        }
+      } catch (error) {
+        console.error("Error searching cocktails:", error);
+      } finally {
+        loading.value = false; // Hide loader after search completes
+      }
+    };
+
     return {
       cocktailsList: cocktails,
       loading,
       handleRemove,
+      handleSearchByName,
+      searchInput,
     };
   },
 };
@@ -74,5 +122,26 @@ export default {
   position: relative;
   z-index: 1;
   background: transparent;
+}
+.filter-wrapper {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid orange;
+  padding: 25px 25px 0 25px;
+  margin: 0 10px;
+  .filter-by-name {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    width: 40%;
+    .v-input {
+      padding-right: 20px;
+    }
+  }
+  .filter-by-select {
+    height: 100%;
+    width: 40%;
+    display: flex;
+  }
 }
 </style>

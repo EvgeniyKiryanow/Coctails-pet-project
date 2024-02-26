@@ -88,4 +88,15 @@ export const cocktailService = {
       throw new Error("Failed to fetch all cocktails");
     }
   },
+  searchCocktailsByName(name, allCocktails) {
+    try {
+      const filteredCocktails = allCocktails.filter((cocktail) => {
+        return cocktail.name.toLowerCase().includes(name.toLowerCase());
+      });
+      return filteredCocktails;
+    } catch (error) {
+      console.error("Error searching cocktails by name: ", error);
+      throw new Error("Failed to search cocktails by name");
+    }
+  },
 };
