@@ -5,7 +5,6 @@
     <div v-else>
       <v-row class="filter-wrapper">
         <div class="filter-by-name">
-          {{ Date.now() }}
           <v-text-field
             v-model="searchInput"
             label="Cocktail name"
