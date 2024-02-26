@@ -1,5 +1,5 @@
 // cocktailService.js
-
+import { inject } from "vue";
 import {
   getFirestore,
   collection,
@@ -11,22 +11,22 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { initializeApp } from "firebase/app";
+// Function to get the db instance
+function getDbInstance() {
+  // Inject the db instance
+  const db = inject("db");
 
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: "cocktails-51c9d.firebaseapp.com",
-  projectId: "cocktails-51c9d",
-  storageBucket: "cocktails-51c9d.appspot.com",
-  messagingSenderId: "748466580997",
-  appId: process.env.FIREBASE_API_ID,
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+  if (!db) {
+    throw new Error("DB instance not found. Make sure it's provided.");
+  }
+
+  return db;
+}
 
 export const cocktailService = {
   async addCocktail(cocktailData) {
     try {
+      const db = getDbInstance();
       const docRef = await addDoc(collection(db, "cocktails"), cocktailData);
       console.log("Cocktail added with ID: ", docRef.id);
       return docRef.id;
@@ -38,6 +38,7 @@ export const cocktailService = {
 
   async deleteCocktail(cocktailId) {
     try {
+      const db = getDbInstance();
       await deleteDoc(doc(db, "cocktails", cocktailId));
       console.log("Cocktail deleted successfully");
     } catch (error) {
@@ -48,6 +49,7 @@ export const cocktailService = {
 
   async updateCocktail(cocktailId, updatedData) {
     try {
+      const db = getDbInstance();
       const cocktailDocRef = doc(db, "cocktails", cocktailId);
       await updateDoc(cocktailDocRef, updatedData);
       console.log("Cocktail updated successfully");
@@ -59,6 +61,7 @@ export const cocktailService = {
 
   async getCocktailsByUserId(userId) {
     try {
+      const db = getDbInstance();
       const q = query(
         collection(db, "cocktails"),
         where("createdBy", "==", userId),
@@ -77,6 +80,7 @@ export const cocktailService = {
 
   async getAllCocktails() {
     try {
+      const db = getDbInstance();
       const querySnapshot = await getDocs(collection(db, "cocktails"));
       const cocktails = [];
       querySnapshot.forEach((doc) => {
@@ -88,19 +92,9 @@ export const cocktailService = {
       throw new Error("Failed to fetch all cocktails");
     }
   },
-  // searchCocktailsByName(name, allCocktails) {
-  //   try {
-  //     const filteredCocktails = allCocktails.filter((cocktail) => {
-  //       return cocktail.name.toLowerCase().includes(name.toLowerCase());
-  //     });
-  //     return filteredCocktails;
-  //   } catch (error) {
-  //     console.error("Error searching cocktails by name: ", error);
-  //     throw new Error("Failed to search cocktails by name");
-  //   }
-  // },
   searchCocktailsByName(name, allCocktails) {
     try {
+      const db = getDbInstance();
       const filteredCocktails = allCocktails.filter((cocktail) => {
         const hasName = cocktail.name
           .toLowerCase()
