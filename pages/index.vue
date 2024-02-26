@@ -7,7 +7,7 @@
         <div class="filter-by-name">
           <v-text-field
             v-model="searchInput"
-            label="Cocktail name"
+            label="Cocktail name or ingredients"
             variant="outlined"
             hide-details
           ></v-text-field>
@@ -17,10 +17,9 @@
           <v-select
             v-model="filterBy"
             label="Filtered by"
-            :items="['Latest', 'Newest']"
+            :items="['Oldest', 'Newest']"
             variant="outlined"
           ></v-select>
-          <v-btn @click="handleSearchVariant">Search</v-btn>
         </div>
       </v-row>
       <div class="cocktails-list-wrapper">
@@ -45,7 +44,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import CocktailsCard from "../assets/components/CocktailsCard.vue";
 import LoaderUi from "../assets/components/LoaderUi.vue";
 import { cocktailService } from "../services/cocktailService";
@@ -90,10 +89,14 @@ export default {
       }
     };
 
+    watch(filterBy, (newValue) => {
+      handleSearchVariant(newValue);
+    });
+
     const handleSearchVariant = () => {
       loading.value = true;
       try {
-        if (filterBy.value === "Latest") {
+        if (filterBy.value === "Oldest") {
           cocktails.value = cocktails.value.sort(
             (a, b) => b.created_at - a.created_at,
           );
