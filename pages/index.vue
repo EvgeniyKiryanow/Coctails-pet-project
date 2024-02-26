@@ -5,6 +5,7 @@
     <div v-else>
       <v-row class="filter-wrapper">
         <div class="filter-by-name">
+          {{ Date.now() }}
           <v-text-field
             v-model="searchInput"
             label="Cocktail name"
@@ -15,17 +16,12 @@
         </div>
         <div class="filter-by-select">
           <v-select
+            v-model="filterBy"
             label="Filtered by"
-            :items="[
-              'California',
-              'Colorado',
-              'Florida',
-              'Georgia',
-              'Texas',
-              'Wyoming',
-            ]"
+            :items="['Latest', 'Newest']"
             variant="outlined"
           ></v-select>
+          <v-btn @click="handleSearchVariant">Search</v-btn>
         </div>
       </v-row>
       <div class="cocktails-list-wrapper">
@@ -62,6 +58,7 @@ export default {
     const cocktails = ref([]);
     const loading = ref(true);
     const searchInput = ref("");
+    const filterBy = ref(null);
 
     onMounted(async () => {
       loading.value = false;
@@ -94,12 +91,33 @@ export default {
       }
     };
 
+    const handleSearchVariant = () => {
+      loading.value = true;
+      try {
+        if (filterBy.value === "Latest") {
+          cocktails.value = cocktails.value.sort(
+            (a, b) => b.created_at - a.created_at,
+          );
+        } else if (filterBy.value === "Newest") {
+          cocktails.value = cocktails.value.sort(
+            (a, b) => a.created_at - b.created_at,
+          );
+        }
+      } catch (error) {
+        console.error("Error filtering cocktails:", error);
+      } finally {
+        loading.value = false;
+      }
+    };
+
     return {
       cocktailsList: cocktails,
       loading,
       handleRemove,
       handleSearchByName,
       searchInput,
+      handleSearchVariant,
+      filterBy,
     };
   },
 };
