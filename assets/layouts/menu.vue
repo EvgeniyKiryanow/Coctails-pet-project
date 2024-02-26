@@ -29,13 +29,14 @@
     <v-btn v-if="hasAccessToken" color="amber-darken-1" @click="handleLogOut"
       >Log Out</v-btn
     >
+    <!-- TODO: Update -->
     <!-- <log-out-modal :is-opened="logOutIsVisible" @accept="handleAccept" /> -->
   </v-toolbar>
 </template>
 
 <script>
 import { useRouter } from "vue-router";
-import { storeToRefs } from "pinia"; // import storeToRefs helper hook from pinia
+import { storeToRefs } from "pinia";
 import { useUserAuthDataStore } from "~/stores/auth";
 // import LogOutModal from "@/assets/components/LogOutModal.vue";
 
@@ -44,21 +45,22 @@ export default {
   // components: { LogOutModal },
   setup() {
     const router = useRouter();
-    const { logOut } = useUserAuthDataStore(); // use registrateUser action from  auth store
+    const { logOut } = useUserAuthDataStore();
     const { authenticated } = storeToRefs(useUserAuthDataStore());
     // Define methods
     const handleLogOut = () => {
       logOut();
       router.push("/");
     };
-
+    // here update authenticated
     const handleAccept = (bool) => {
       console.log(bool, "bool");
       // Perform any additional actions as needed
     };
-
+    const hasAccessToken =
+      router.currentRoute.value.meta.hasAccessToken || authenticated || false;
     return {
-      hasAccessToken: authenticated,
+      hasAccessToken,
       handleLogOut,
       handleAccept,
     };

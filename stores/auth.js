@@ -53,26 +53,12 @@ export const useUserAuthDataStore = defineStore({
       }
     },
     logUserOut() {
-      const token = useCookie("token"); // useCookie new hook in nuxt 3
-      this.authenticated = false; // set authenticated  state value to false
-      token.value = null; // clear the token cookie
+      const token = useCookie("token");
+      this.authenticated = false;
+      token.value = null;
     },
     logOut() {
       this.setUser(null);
     },
   },
 });
-// const handleRegister = async () => {
-//     if (response) {
-//       userAuthStore.setUser(response.user);
-//       router.push("/favourites");
-//     } else {
-//       throw new Error("Registration failed");
-//     }
-//   } catch (error) {
-//     console.error("Error during registration:", error);
-//     alert("Registration failed. Please try again.");
-//   } finally {
-//     isRegistering.value = false;
-//   }
-// };

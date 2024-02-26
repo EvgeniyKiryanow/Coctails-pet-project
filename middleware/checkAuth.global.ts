@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware((to) => {
   if (process.client) {
     const accessToken = localStorage.getItem("accessToken");
 
@@ -10,6 +10,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
       ) {
         return navigateTo("/");
       }
+    } else {
+      to.meta.hasAccessToken = true;
     }
   }
 });

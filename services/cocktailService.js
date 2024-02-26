@@ -92,7 +92,6 @@ export const cocktailService = {
   },
   searchCocktailsByName(name, allCocktails) {
     try {
-      const db = getDbInstance();
       const filteredCocktails = allCocktails.filter((cocktail) => {
         const hasName = cocktail.name
           .toLowerCase()
