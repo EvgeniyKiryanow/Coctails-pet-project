@@ -21,10 +21,11 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({ autoImport: true }));
       });
     },
+    "@pinia/nuxt",
   ],
-  css: ["~/assets/css/main.css"],
   devtools: { enabled: true },
   vue: {
     propsDestructure: true,
   },
+  css: ["@/assets/style/main.scss"],
 });

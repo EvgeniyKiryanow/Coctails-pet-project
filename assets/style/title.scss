@@ -1,0 +1,29 @@
+.title {
+    font-weight: 600;
+    font-family: fantasy;
+    text-align: center;
+}
+.v-card-title {
+    font-family: fantasy;
+    font-style: italic;
+    text-align: center;
+    font-weight: 600;
+}
+.v-toolbar-title__placeholder {
+    color: orange;
+}
+.v-card {
+    border: 1px solid orange;
+}
+.v-card-text {
+    font-family: fantasy;
+    font-style: italic;
+}
+.title-steps {
+    text-align: center;
+    font-weight: 600 !important;
+    border-bottom: 1px solid lightgrey;
+}
+.v-card-actions {
+    justify-content: center;
+}
