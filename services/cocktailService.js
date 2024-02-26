@@ -1,7 +1,6 @@
 // cocktailService.js
 import { inject } from "vue";
 import {
-  getFirestore,
   collection,
   addDoc,
   deleteDoc,
@@ -11,9 +10,8 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-// Function to get the db instance
+
 function getDbInstance() {
-  // Inject the db instance
   const db = inject("db");
 
   if (!db) {
