@@ -39,4 +39,7 @@ export default defineNuxtConfig({
   },
   css: ["@/assets/style/main.scss"],
   plugins: ["@/plugins/firebase.client.ts"],
+  router: {
+    middleware: ["checkAuth"],
+  },
 });
