@@ -12,14 +12,14 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
-// id UKlYINkIZGCakvyCTZ7M
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBGY9-BYsmWxWzhM872DjHoG_Gg5zQNj4I",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "cocktails-51c9d.firebaseapp.com",
   projectId: "cocktails-51c9d",
   storageBucket: "cocktails-51c9d.appspot.com",
   messagingSenderId: "748466580997",
-  appId: "1:748466580997:web:1b35782e0e807c433df66c",
+  appId: process.env.FIREBASE_API_ID,
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
